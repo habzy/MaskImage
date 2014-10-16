@@ -9,11 +9,16 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
+import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
+    ImageView mImageView;
+    ImageView mImageView2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,11 +26,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         // RUNTIME
-        ImageView mImageView = (ImageView) findViewById(R.id.imageview_id);
-        makeMaskImageScaleFit(mImageView, R.drawable.nature);
-        
-        ImageView mImageView2 = (ImageView) findViewById(R.id.imageview_id2);
-        makeMaskImage(mImageView2, R.drawable.nature);
+        mImageView = (ImageView) findViewById(R.id.imageview_id);
+
+        mImageView2 = (ImageView) findViewById(R.id.imageview_id2);
+
+        Button yo_button = (Button) findViewById(R.id.yo_button);
+        yo_button.setOnClickListener(this);
+
     }
 
     // Method of creating mask runtime
@@ -33,26 +40,28 @@ public class MainActivity extends Activity {
         // Get mask bitmap
         Bitmap mask = BitmapFactory.decodeResource(getResources(), R.drawable.custom_shape);
 
-        //Scale imageView and it's bitmap to the size of the mask
+        // Scale imageView and it's bitmap to the size of the mask
         mImageView.getLayoutParams().width = mask.getWidth();
         mImageView.getLayoutParams().height = mask.getHeight();
-        
+
         // Get bitmap from ImageView and store into 'original'
         mImageView.setDrawingCacheEnabled(true);
         mImageView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         mImageView.layout(0, 0, mImageView.getMeasuredWidth(), mImageView.getMeasuredHeight());
         mImageView.buildDrawingCache(true);
-        Bitmap original = mImageView.getDrawingCache();
-        
-        // Scale that bitmap 
-        Bitmap original_scaled = Bitmap.createScaledBitmap(original, mask.getWidth(), mask.getHeight(), false);
+//        Bitmap original = mImageView.getDrawingCache();
+        Bitmap original = BitmapFactory.decodeResource(getResources(), mContent);
+
+        // Scale that bitmap
+        Bitmap original_scaled =
+                Bitmap.createScaledBitmap(original, mask.getWidth(), mask.getHeight(), false);
         mImageView.setImageBitmap(original_scaled);
         mImageView.setDrawingCacheEnabled(false);
-        
+
         // Create result bitmap
         Bitmap result = Bitmap.createBitmap(mask.getWidth(), mask.getHeight(), Config.ARGB_8888);
-        
+
         // Perform masking
         Canvas mCanvas = new Canvas(result);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -60,7 +69,7 @@ public class MainActivity extends Activity {
         mCanvas.drawBitmap(original_scaled, 0, 0, null);
         mCanvas.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(null);
-        
+
         // Set imageView to 'result' bitmap
         mImageView.setImageBitmap(result);
         mImageView.setScaleType(ScaleType.FIT_XY);
@@ -68,12 +77,11 @@ public class MainActivity extends Activity {
         // Make background transparent
         mImageView.setBackgroundResource(android.R.color.transparent);
     }
-    
-  // Method of creating mask runtime
-    public void makeMaskImage(ImageView mImageView, int mContent)
-    {
+
+    // Method of creating mask runtime
+    public void makeMaskImage(ImageView mImageView, int mContent) {
         Bitmap original = BitmapFactory.decodeResource(getResources(), mContent);
-        Bitmap mask = BitmapFactory.decodeResource(getResources(),R.drawable.custom_shape);
+        Bitmap mask = BitmapFactory.decodeResource(getResources(), R.drawable.custom_shape);
         Bitmap result = Bitmap.createBitmap(mask.getWidth(), mask.getHeight(), Config.ARGB_8888);
         Canvas mCanvas = new Canvas(result);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -84,5 +92,19 @@ public class MainActivity extends Activity {
         mImageView.setImageBitmap(result);
         mImageView.setScaleType(ScaleType.CENTER);
         mImageView.setBackgroundResource(android.R.color.transparent);
+    }
+
+    @Override
+    public void onClick(View arg0) {
+        switch (arg0.getId()) {
+            case R.id.yo_button:
+                makeMaskImageScaleFit(mImageView, R.drawable.nature);
+                makeMaskImage(mImageView2, R.drawable.nature);
+
+                break;
+
+            default:
+                break;
+        }
     }
 }

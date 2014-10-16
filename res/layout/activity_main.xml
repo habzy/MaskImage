@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:maskimage="http://schemas.android.com/apk/res/com.hotveryspicy.maskimage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -14,24 +13,33 @@
         android:layout_height="wrap_content"/>
     -->
 
-    <ImageView
-        android:id="@+id/imageview_id"
+    <Button
+        android:id="@+id/yo_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/nature" >
-    </ImageView>
+        android:layout_below="@+id/imageview_id2"
+        android:text="Yo" />
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="50dip" />
-
-    <ImageView
-        android:id="@+id/imageview_id2"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/comment_list_title_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/nature" >
-    </ImageView>
+        android:background="#FF00FFFF" >
 
+        <ImageView
+            android:id="@+id/imageview_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nature" >
+        </ImageView>
 
+        <ImageView
+            android:id="@+id/imageview_id2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageview_id"
+            android:src="@drawable/nature" >
+        </ImageView>
+    </RelativeLayout>
 
 </LinearLayout>
